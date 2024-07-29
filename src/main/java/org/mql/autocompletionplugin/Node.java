@@ -5,43 +5,49 @@ import java.util.List;
 import java.util.Map;
 import java.util.Vector;
 
+/*
+ * 
+ */
 public class Node {
-	private String value;
-	private Map<Character, Node> children;
+	private Map<Character, List<Node>> children;
 	private boolean isLeaf;
 
-	
 	public Node() {
-		this.children = new HashMap<Character, Node>();
+		this.children = new HashMap<Character, List<Node>>();
 		this.isLeaf = true;
 	}
-	
-	public Node(String value) {
+
+	public Node(String s) {
 		super();
-		this.value = value;
-		
+		if (s.length() >= 2) {
+			addChild(s.charAt(0), new Node(s.substring(1)));
+		}else if(s.length() == 1){
+			this.isLeaf = true;
+		}
 	}
 
-	public String getValue() {
-		return value;
+	public void addChild(Character key, Node n) {
+		if (children.containsKey(key)) {
+			children.get(key).add(n);
+		} else {
+			List<Node> nl = new Vector<Node>();
+			nl.add(n);
+			children.put(key, nl);
+		}
 	}
 
-	public void addChild(Character key,Node n) {
-		children.put(key, n);
-	}
-	
-	public Node getChild(Character key) {
+	public List<Node> getChildrenForKey(Character key) {
 		return children.get(key);
 	}
-	
-	public Map<Character, Node> getChildren() {
+
+	public Map<Character, List<Node>> getChildren() {
 		return children;
 	}
-	
+
 	public boolean isLeaf() {
 		return isLeaf;
 	}
-	
+
 	public void setIsLeaf(boolean isLeaf) {
 		this.isLeaf = isLeaf;
 	}
