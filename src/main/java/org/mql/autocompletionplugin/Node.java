@@ -15,7 +15,7 @@ public class Node {
 
 	public Node() {
 		this.children = new HashMap<Character, List<Node>>();
-		this.isLeaf = true;
+		this.isLeaf = false;
 	}
 
 	public Node(String s) {
