@@ -4,11 +4,16 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.Vector;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.text.BadLocationException;
 import javax.swing.text.StyledDocument;
 
 import org.mql.jcodeeditor.documentHandlers.OpenDocumentsHandler;
+import org.mql.jcodeeditor.highlighting.Token;
+import org.mql.jcodeeditor.highlighting.TokenType;
 
 public class Autocompleter implements OpenDocumentsHandler {
 	private List<StyledDocument> openDocuments;
@@ -16,6 +21,7 @@ public class Autocompleter implements OpenDocumentsHandler {
 
 	public Autocompleter() {
 		root = new Node();
+		System.out.println("autocompleter");
 	}
 
 	@Override
@@ -28,9 +34,11 @@ public class Autocompleter implements OpenDocumentsHandler {
 			try {
 				String text = d.getText(0, d.getLength());
 //				words.addAll(Arrays.asList());
-				String words[] = text.split("\\b\\w*\\b");
+				List<String> words = getWords(text);
 				for (String w : words) {
-					root.addChild(w.charAt(0), new Node(w.substring(1)));
+					System.out.println(w);
+					if (w.length() > 0)
+						root.addChild(w.charAt(0), new Node(w.substring(1)));
 				}
 
 			} catch (BadLocationException e) {
@@ -52,13 +60,17 @@ public class Autocompleter implements OpenDocumentsHandler {
 
 	@Override
 	public void addDocument(StyledDocument doc) {
+		System.out.println("add document");
 		openDocuments.add(doc);
 		try {
 			String text = doc.getText(0, doc.getLength());
-//			words.addAll(Arrays.asList());
-			String words[] = text.split("\\b\\w*\\b");
+			System.out.println("text : "+ text);
+			List<String> words = getWords(text);
+			System.out.println("words : " + words);
 			for (String w : words) {
-				root.addChild(w.charAt(0), new Node(w.substring(1)));
+				System.out.println(w);
+				if (w.length() > 0)
+					root.addChild(w.charAt(0), new Node(w.substring(1)));
 			}
 
 		} catch (BadLocationException e) {
@@ -66,6 +78,17 @@ public class Autocompleter implements OpenDocumentsHandler {
 		}
 		System.out.println(root);
 
+	}
+
+	private List<String> getWords(String text) {
+		Pattern p = Pattern.compile("\\b\\w*\\b");
+		Matcher m = p.matcher(text);
+		List<String> sl = new Vector<String>();
+		while (m.find()) {
+			System.out.println(m.group());
+			sl.add(m.group());
+		}
+		return sl;
 	}
 
 }

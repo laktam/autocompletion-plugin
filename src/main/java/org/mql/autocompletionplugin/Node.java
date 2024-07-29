@@ -19,7 +19,7 @@ public class Node {
 	}
 
 	public Node(String s) {
-		super();
+		this();
 		if (s.length() >= 2) {
 			addChild(s.charAt(0), new Node(s.substring(1)));
 		} else if (s.length() == 1) {
@@ -28,6 +28,9 @@ public class Node {
 	}
 
 	public void addChild(Character key, Node n) {
+		if(children == null) {
+			
+		}
 		if (children.containsKey(key)) {
 			children.get(key).add(n);
 		} else {
