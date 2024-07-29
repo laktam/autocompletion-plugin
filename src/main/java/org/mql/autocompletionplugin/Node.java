@@ -7,28 +7,34 @@ import java.util.Vector;
 
 public class Node {
 	private String value;
-	private Map<String, Node> children;
+	private Map<Character, Node> children;
 	private boolean isLeaf;
 
-	public Node(String value) {
-		this.value = value;
-		this.children = new HashMap<String, Node>();
+	
+	public Node() {
+		this.children = new HashMap<Character, Node>();
 		this.isLeaf = true;
+	}
+	
+	public Node(String value) {
+		super();
+		this.value = value;
+		
 	}
 
 	public String getValue() {
 		return value;
 	}
 
-	public void addChild(String key,Node n) {
+	public void addChild(Character key,Node n) {
 		children.put(key, n);
 	}
 	
-	public Node getChild(String key) {
+	public Node getChild(Character key) {
 		return children.get(key);
 	}
 	
-	public Map<String, Node> getChildren() {
+	public Map<Character, Node> getChildren() {
 		return children;
 	}
 	
