@@ -4,70 +4,102 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.Vector;
 
 /*
  * 
  */
 public class Node {
-	private Map<Character, List<Node>> children;
-	private boolean isLeaf;
+	private Map<Character, Node> children;
+	private boolean wordStop;
 
 	public Node() {
-		this.children = new HashMap<Character, List<Node>>();
-		this.isLeaf = false;
+		this.children = new HashMap<Character, Node>();
+		this.wordStop = false;
+	}
+	
+	public Node(boolean wordStop) {
+		this.children = new HashMap<Character, Node>();
+		this.wordStop = wordStop;
 	}
 
 	public Node(String s) {
 		this();
-		if (s.length() >= 2) {
-			addChild(s.charAt(0), new Node(s.substring(1)));
-		} else if (s.length() == 1) {
-			this.isLeaf = true;
+		if(s.length() == 1) {
+			children.put(s.charAt(0), new Node(true));
+		}else if (s.length() >= 2) {
+			children.put(s.charAt(0), new Node(s.substring(1)));
 		}
 	}
 
-	public void addChild(Character key, Node n) {
-		if(children == null) {
-			
+	public void insert(String s) {
+		if(s.length() > 1) {
+			if (children.containsKey(s.charAt(0))) {
+				children.get(s.charAt(0)).insert(s.substring(1));
+			} else {
+				children.put(s.charAt(0), new Node(s.substring(1)));
+			}	
+		}else if(s.length() == 1) {
+			if (children.containsKey(s.charAt(0))) {
+				// already exist no need to do anything
+			}else {
+				children.put(s.charAt(0), new Node(true));
+			}
 		}
-		if (children.containsKey(key)) {
-			children.get(key).add(n);
+		
+	}
+
+	public Node getNodesForPrefix(String prefix) {
+		if (prefix.length() == 1) {
+			return children.get(prefix.charAt(0));
 		} else {
-			List<Node> nl = new Vector<Node>();
-			nl.add(n);
-			children.put(key, nl);
+			return getNodesForPrefix(prefix.substring(1));
 		}
 	}
 
-	public List<Node> getChildrenForKey(Character key) {
+	
+	
+	public List<Character> getKeys(){
+		List<Character> characters= new Vector<Character>();
+		for(Entry<Character, Node> entry : children.entrySet()) {
+			characters.add(entry.getKey());			
+		}
+		return characters;
+	}
+	
+//	public List<String> getStringList(){
+//		List<String> result = new Vector<>();
+//		Set<Entry<Character, Node>> entrySet = children.entrySet();
+//		List<Entry<Character, Node>> entryList = new Vector<>(entrySet);
+//		for(int i = 0; i < entryList.size(); i++) {
+//			result.add(entryList.get(i).getKey().toString());
+//			entryList.get(i);
+//		}
+//		for(Entry<Character, Node> entry : children.entrySet()) {
+//			result.add(entry.getKey());
+//			Node nodes = entry.getValue();
+//			
+//		}
+//		return 
+//	}
+
+	public Node getChildrenForKey(Character key) {
 		return children.get(key);
 	}
 
-	public Map<Character, List<Node>> getChildren() {
+	public Map<Character, Node> getChildren() {
 		return children;
 	}
 
 	public boolean isLeaf() {
-		return isLeaf;
+		return wordStop;
 	}
 
 	public void setIsLeaf(boolean isLeaf) {
-		this.isLeaf = isLeaf;
+		this.wordStop = isLeaf;
 	}
 
-	@Override
-	public String toString() {
-		String s = "";
 
-		for (Entry<Character, List<Node>> entry : children.entrySet()) {
-			s += "key : " + entry.getKey();
-			for (Node n : children.get(entry.getKey())) {
-				s += n.toString();
-			}
-			s += "\n";
-		}
-		return s;
-	}
 
 }
