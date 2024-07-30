@@ -38,7 +38,7 @@ public class Autocompleter implements OpenDocumentsHandler {
 				for (String w : words) {
 					System.out.println(w);
 					if (w.length() > 0)
-						root.addChild(w.charAt(0), new Node(w.substring(1)));
+						root.insert(w);
 				}
 
 			} catch (BadLocationException e) {
@@ -70,13 +70,13 @@ public class Autocompleter implements OpenDocumentsHandler {
 			for (String w : words) {
 				System.out.println(w);
 				if (w.length() > 0)
-					root.addChild(w.charAt(0), new Node(w.substring(1)));
+					root.insert(w);
 			}
 
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
-		System.out.println(root);
+		System.out.println(root.getSuggestions("v"));
 
 	}
 

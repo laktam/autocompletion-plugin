@@ -18,7 +18,7 @@ public class Node {
 		this.children = new HashMap<Character, Node>();
 		this.wordStop = false;
 	}
-	
+
 	public Node(boolean wordStop) {
 		this.children = new HashMap<Character, Node>();
 		this.wordStop = wordStop;
@@ -26,48 +26,80 @@ public class Node {
 
 	public Node(String s) {
 		this();
-		if(s.length() == 1) {
+		if (s.length() == 1) {
 			children.put(s.charAt(0), new Node(true));
-		}else if (s.length() >= 2) {
+		} else if (s.length() >= 2) {
 			children.put(s.charAt(0), new Node(s.substring(1)));
 		}
 	}
 
 	public void insert(String s) {
-		if(s.length() > 1) {
+		if (s.length() > 1) {
 			if (children.containsKey(s.charAt(0))) {
 				children.get(s.charAt(0)).insert(s.substring(1));
 			} else {
 				children.put(s.charAt(0), new Node(s.substring(1)));
-			}	
-		}else if(s.length() == 1) {
+			}
+		} else if (s.length() == 1) {
 			if (children.containsKey(s.charAt(0))) {
 				// already exist no need to do anything
-			}else {
+			} else {
 				children.put(s.charAt(0), new Node(true));
 			}
 		}
-		
+
 	}
 
-	public Node getNodesForPrefix(String prefix) {
+	/*
+	 * the keys for the children of the node returned here are the start for
+	 * suggestions
+	 */
+	public Node getNodeForPrefix(String prefix) {
 		if (prefix.length() == 1) {
 			return children.get(prefix.charAt(0));
 		} else {
-			return getNodesForPrefix(prefix.substring(1));
+			return children.get(prefix.charAt(0)).getNodeForPrefix(prefix.substring(1));
 		}
 	}
 
+	public List<String> getSuggestions(String prefix) {
+		Node n = getNodeForPrefix(prefix);
+		List<String> suggestions = new Vector<String>();
+		for (Entry<Character, Node> entry : n.children.entrySet()) {
+			Node child = entry.getValue();
+			if(child.wordStop) {
+				suggestions.add(prefix + entry.getKey());
+			}else {
+				suggestions.addAll(child.getStrings(prefix + entry.getKey()));
+			}
+		}
+		return suggestions;
+	}
 	
-	
-	public List<Character> getKeys(){
-		List<Character> characters= new Vector<Character>();
-		for(Entry<Character, Node> entry : children.entrySet()) {
-			characters.add(entry.getKey());			
+	/*
+	 * return all the combinations and concat this prefix at the beginning
+	 */
+	public List<String> getStrings(String prefix){
+		List<String> sList = new Vector<String>();
+		for (Entry<Character, Node> entry : children.entrySet()) {
+			Node child = entry.getValue();
+			if(child.wordStop) {
+				sList.add(prefix + entry.getKey());
+			}else {
+				sList.addAll(child.getStrings(prefix + entry.getKey()));
+			}
+		}
+		return sList;
+	}
+
+	public List<Character> getKeys() {
+		List<Character> characters = new Vector<Character>();
+		for (Entry<Character, Node> entry : children.entrySet()) {
+			characters.add(entry.getKey());
 		}
 		return characters;
 	}
-	
+
 //	public List<String> getStringList(){
 //		List<String> result = new Vector<>();
 //		Set<Entry<Character, Node>> entrySet = children.entrySet();
@@ -92,14 +124,13 @@ public class Node {
 		return children;
 	}
 
-	public boolean isLeaf() {
+	public boolean isWordStop() {
 		return wordStop;
 	}
 
-	public void setIsLeaf(boolean isLeaf) {
-		this.wordStop = isLeaf;
+	public void setWordStop(boolean wordStop) {
+		this.wordStop = wordStop;
 	}
-
 
 
 }
