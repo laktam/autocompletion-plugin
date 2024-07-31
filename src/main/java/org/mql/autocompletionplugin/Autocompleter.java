@@ -49,7 +49,6 @@ public class Autocompleter implements OpenDocumentsHandler {
 
 	@Override
 	public void addDocument(StyledDocument doc) {
-		doc.addDocumentListener(new DocumentTypingListener(root));
 		openDocuments.add(doc);
 		try {
 			String text = doc.getText(0, doc.getLength());
@@ -59,6 +58,7 @@ public class Autocompleter implements OpenDocumentsHandler {
 				if (w.length() > 0)
 					root.insert(w);
 			}
+			doc.addDocumentListener(new DocumentTypingListener(root));
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

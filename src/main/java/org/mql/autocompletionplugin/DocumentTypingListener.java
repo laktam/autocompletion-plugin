@@ -10,7 +10,7 @@ import javax.swing.text.Document;
 
 public class DocumentTypingListener implements DocumentListener {
 	private Node root;
-	private Pattern p = Pattern.compile("\\b\\w*\\b");
+	private Pattern p = Pattern.compile("\\b\\w+\\b");
 	
 	public DocumentTypingListener(Node root) {
 		this.root = root;
@@ -21,6 +21,8 @@ public class DocumentTypingListener implements DocumentListener {
 		 try {
 			Document doc = e.getDocument();
 			String text = doc.getText(0, e.getOffset() + e.getLength());
+			System.out.println("text from 0 to change :");
+			System.out.println(text);
 			// 1 = get the offset of the change
 			// 2 = get the offset of last word boundry \b from 0 to change offset
 			// get the word from 1 to 2

@@ -58,34 +58,42 @@ public class Node {
 		if (prefix.length() == 1) {
 			return children.get(prefix.charAt(0));
 		} else {
-			return children.get(prefix.charAt(0)).getNodeForPrefix(prefix.substring(1));
+			if (children.containsKey(prefix.charAt(0))) {
+				return children.get(prefix.charAt(0)).getNodeForPrefix(prefix.substring(1));
+			} else {
+				return null;
+			}
 		}
 	}
 
 	public List<String> getSuggestions(String prefix) {
 		Node n = getNodeForPrefix(prefix);
+
 		List<String> suggestions = new Vector<String>();
-		for (Entry<Character, Node> entry : n.children.entrySet()) {
-			Node child = entry.getValue();
-			if(child.wordStop) {
-				suggestions.add(prefix + entry.getKey());
-			}else {
-				suggestions.addAll(child.getStrings(prefix + entry.getKey()));
+		if (n != null) {
+
+			for (Entry<Character, Node> entry : n.children.entrySet()) {
+				Node child = entry.getValue();
+				if (child.wordStop) {
+					suggestions.add(prefix + entry.getKey());
+				} else {
+					suggestions.addAll(child.getStrings(prefix + entry.getKey()));
+				}
 			}
 		}
 		return suggestions;
 	}
-	
+
 	/*
 	 * return all the combinations and concat this prefix at the beginning
 	 */
-	public List<String> getStrings(String prefix){
+	public List<String> getStrings(String prefix) {
 		List<String> sList = new Vector<String>();
 		for (Entry<Character, Node> entry : children.entrySet()) {
 			Node child = entry.getValue();
-			if(child.wordStop) {
+			if (child.wordStop) {
 				sList.add(prefix + entry.getKey());
-			}else {
+			} else {
 				sList.addAll(child.getStrings(prefix + entry.getKey()));
 			}
 		}
@@ -131,6 +139,5 @@ public class Node {
 	public void setWordStop(boolean wordStop) {
 		this.wordStop = wordStop;
 	}
-
 
 }
