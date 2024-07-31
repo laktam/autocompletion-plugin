@@ -39,7 +39,7 @@ public class DocumentTypingListener implements DocumentListener {
 				System.out.println("typedWord : " + typedWord);
 				System.out.println("suggestions for typed word :");
 				List<String> suggestions =root.getSuggestions(typedWord);
-				System.out.println();
+				System.out.println(suggestions);
 				// JPopMenu
 				suggestionsMenu.removeAll();
 				for(String suggestion : suggestions) {
@@ -58,12 +58,13 @@ public class DocumentTypingListener implements DocumentListener {
 			e1.printStackTrace();
 		}
 	}
-
+	
+	// TODO when removing if there is only one character left i get no suggestions
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		try {
 			Document doc = e.getDocument();
-			String text = doc.getText(0, e.getOffset() - e.getLength());
+			String text = doc.getText(0, e.getOffset() - e.getLength() + 1);
 
 			// test if cursor is on a word not on a space
 			String insertion = doc.getText(e.getOffset() - e.getLength(), e.getLength());
