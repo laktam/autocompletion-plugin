@@ -38,21 +38,20 @@ public class DocumentTypingListener implements DocumentListener {
 				}
 				System.out.println("typedWord : " + typedWord);
 				System.out.println("suggestions for typed word :");
-				List<String> suggestions =root.getSuggestions(typedWord);
+				List<String> suggestions = root.getSuggestions(typedWord);
 				System.out.println(suggestions);
 				// JPopMenu
-				suggestionsMenu.removeAll();
-				for(String suggestion : suggestions) {
-					suggestionsMenu.add(new JMenuItem(suggestion));	
-				}
-//				suggestionsMenu.sh
-				suggestionsMenu.setVisible(true);
+//				suggestionsMenu.setVisible(false);
+				displaySuggestions(suggestions);
 				
 				
 				// i need to add new word after a suggestion is inserted or after each complete
 				// word \b
 				// root.insert(typedWord);
+			}else {
+				suggestionsMenu.setVisible(false);
 			}
+
 		} catch (BadLocationException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -77,12 +76,17 @@ public class DocumentTypingListener implements DocumentListener {
 				}
 				System.out.println("typedWord : " + typedWord);
 				System.out.println("suggestions for typed word :");
-				System.out.println(root.getSuggestions(typedWord));
+				List<String> suggestions = root.getSuggestions(typedWord);
+				System.out.println(suggestions);
 				//
-
+//				suggestionsMenu.setVisible(false);
+				displaySuggestions(suggestions);
+				
 				// i need to add new word after a suggestion is inserted or after each complete
 				// word \b
 				// root.insert(typedWord);
+			}else {
+				suggestionsMenu.setVisible(false);
 			}
 
 		} catch (BadLocationException e1) {
@@ -94,6 +98,19 @@ public class DocumentTypingListener implements DocumentListener {
 	@Override
 	public void changedUpdate(DocumentEvent e) {
 
+	}
+	
+	private void displaySuggestions(List<String> suggestions) {
+		suggestionsMenu.setVisible(false);
+		suggestionsMenu.removeAll();
+		if(!suggestions.isEmpty()) {
+			for(String suggestion : suggestions) {
+				suggestionsMenu.add(new JMenuItem(suggestion));	
+			}
+			suggestionsMenu.setVisible(true);
+		}else {
+			suggestionsMenu.setVisible(false);
+		}
 	}
 
 }
