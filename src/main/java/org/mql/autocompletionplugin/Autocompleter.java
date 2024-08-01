@@ -41,7 +41,6 @@ public class Autocompleter implements TextPanesHandler {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	@Override
@@ -64,7 +63,7 @@ public class Autocompleter implements TextPanesHandler {
 				if (w.length() > 0)
 					root.insert(w);
 			}
-			doc.addDocumentListener(new DocumentTypingListener(root));
+			doc.addDocumentListener(new DocumentTypingListener(root, textPane));
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}

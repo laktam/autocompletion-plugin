@@ -1,24 +1,30 @@
 package org.mql.autocompletionplugin;
 
+import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
 import javax.swing.text.Document;
 
 public class DocumentTypingListener implements DocumentListener {
 	private Node root;
 	private Pattern p = Pattern.compile("\\b\\w+\\b");
 	private JPopupMenu suggestionsMenu;
+	private JTextPane textPane;
 
-	public DocumentTypingListener(Node root) {
+	public DocumentTypingListener(Node root, JTextPane textPane) {
 		this.root = root;
 		suggestionsMenu = new JPopupMenu();
+		this.textPane = textPane;
 	}
 
 	@Override
@@ -43,12 +49,11 @@ public class DocumentTypingListener implements DocumentListener {
 				// JPopMenu
 //				suggestionsMenu.setVisible(false);
 				displaySuggestions(suggestions);
-				
-				
+
 				// i need to add new word after a suggestion is inserted or after each complete
 				// word \b
 				// root.insert(typedWord);
-			}else {
+			} else {
 				suggestionsMenu.setVisible(false);
 			}
 
@@ -57,7 +62,7 @@ public class DocumentTypingListener implements DocumentListener {
 			e1.printStackTrace();
 		}
 	}
-	
+
 	// TODO when removing if there is only one character left i get no suggestions
 	@Override
 	public void removeUpdate(DocumentEvent e) {
@@ -81,11 +86,11 @@ public class DocumentTypingListener implements DocumentListener {
 				//
 //				suggestionsMenu.setVisible(false);
 				displaySuggestions(suggestions);
-				
+
 				// i need to add new word after a suggestion is inserted or after each complete
 				// word \b
 				// root.insert(typedWord);
-			}else {
+			} else {
 				suggestionsMenu.setVisible(false);
 			}
 
@@ -99,18 +104,26 @@ public class DocumentTypingListener implements DocumentListener {
 	public void changedUpdate(DocumentEvent e) {
 
 	}
-	
+
 	private void displaySuggestions(List<String> suggestions) {
 		suggestionsMenu.setVisible(false);
 		suggestionsMenu.removeAll();
-		if(!suggestions.isEmpty()) {
-			for(String suggestion : suggestions) {
-				suggestionsMenu.add(new JMenuItem(suggestion));	
+		if (!suggestions.isEmpty()) {
+			for (String suggestion : suggestions) {
+				suggestionsMenu.add(new JMenuItem(suggestion));
 			}
+			suggestionsMenu.setLocation(getCaretPosition());
 			suggestionsMenu.setVisible(true);
-		}else {
+		} else {
 			suggestionsMenu.setVisible(false);
 		}
 	}
 
+	private Point getCaretPosition() {
+		Caret caret = textPane.getCaret();
+		Point p = caret.getMagicCaretPosition();
+		p.x += textPane.getLocationOnScreen().x;
+		p.y += textPane.getLocationOnScreen().y + textPane.getFont().getSize2D();
+		return p;
+	}
 }
