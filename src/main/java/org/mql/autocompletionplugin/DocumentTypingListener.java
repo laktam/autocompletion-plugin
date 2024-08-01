@@ -24,6 +24,7 @@ public class DocumentTypingListener implements DocumentListener {
 	public DocumentTypingListener(Node root, JTextPane textPane) {
 		this.root = root;
 		suggestionsMenu = new JPopupMenu();
+		suggestionsMenu.addKeyListener(new JPopMenuKeyListener(suggestionsMenu));
 		this.textPane = textPane;
 	}
 
@@ -58,7 +59,6 @@ public class DocumentTypingListener implements DocumentListener {
 			}
 
 		} catch (BadLocationException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
