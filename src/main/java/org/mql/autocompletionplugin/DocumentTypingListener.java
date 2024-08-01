@@ -24,8 +24,9 @@ public class DocumentTypingListener implements DocumentListener {
 	public DocumentTypingListener(Node root, JTextPane textPane) {
 		this.root = root;
 		suggestionsMenu = new JPopupMenu();
-		suggestionsMenu.addKeyListener(new JPopMenuKeyListener(suggestionsMenu));
+//		suggestionsMenu.addKeyListener(new JPopMenuKeyListener(suggestionsMenu));
 		this.textPane = textPane;
+		textPane.addKeyListener(new JTextPaneKeyListener(suggestionsMenu));
 	}
 
 	@Override
