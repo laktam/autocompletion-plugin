@@ -1,5 +1,6 @@
 package org.mql.autocompletionplugin;
 
+import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
@@ -24,7 +25,7 @@ public class DocumentTypingListener implements DocumentListener {
 	public DocumentTypingListener(Node root, JTextPane textPane) {
 		this.root = root;
 		suggestionsMenu = new JPopupMenu();
-//		suggestionsMenu.addKeyListener(new JPopMenuKeyListener(suggestionsMenu));
+		suggestionsMenu.addKeyListener(new JPopupMenuKeyListener(suggestionsMenu));
 		this.textPane = textPane;
 		textPane.addKeyListener(new JTextPaneKeyListener(suggestionsMenu));
 	}
@@ -115,6 +116,7 @@ public class DocumentTypingListener implements DocumentListener {
 			}
 			suggestionsMenu.setLocation(getCaretPosition());
 			suggestionsMenu.setVisible(true);
+			
 		} else {
 			suggestionsMenu.setVisible(false);
 		}
