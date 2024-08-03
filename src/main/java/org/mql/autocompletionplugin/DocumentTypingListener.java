@@ -1,5 +1,6 @@
 package org.mql.autocompletionplugin;
 
+import java.awt.Color;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
@@ -116,8 +117,11 @@ public class DocumentTypingListener implements DocumentListener {
 			}
 			suggestionsMenu.setLocation(getCaretPosition());
 			suggestionsMenu.setVisible(true);
-			// selected the first element 
+			// selected the first element
 			suggestionsMenu.getSelectionModel().setSelectedIndex(0);
+			((JMenuItem) suggestionsMenu.getComponent(0)).setOpaque(true);
+			((JMenuItem) suggestionsMenu.getComponent(0)).setBackground(Color.blue);
+			((JMenuItem) suggestionsMenu.getComponent(0)).setForeground(Color.red);
 
 		} else {
 			suggestionsMenu.setVisible(false);

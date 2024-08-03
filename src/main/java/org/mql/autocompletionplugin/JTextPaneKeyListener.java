@@ -32,18 +32,23 @@ public class JTextPaneKeyListener implements KeyListener {
 		// if the popupmenu is visible dont use arrow mouvement in the doc
 		// if popup is visible that mean there is items
 		if (popupMenu.isVisible()) {
-			e.consume(); // Prevent default tab behaviors
-			if (e.getKeyCode() == KeyEvent.VK_UP && selected > 0) {
-				selected--;
-				System.out.println("up pressed");
+			if (e.getKeyCode() == KeyEvent.VK_UP) {
+				e.consume(); // Prevent default tab behaviors
+				if (selected > 0) {
+					selected--;
+					System.out.println("up pressed");
+					selectItem(selected);
+				}
 			}
-			if (e.getKeyCode() == KeyEvent.VK_DOWN && selected < popupMenu.getComponentCount() - 1) {
-				selected++;
-				e.consume();
-				System.out.println("down pressed");
+			if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+				e.consume(); // Prevent default tab behaviors
+				if (selected < popupMenu.getComponentCount() - 1) {
+					selected++;
+					e.consume();
+					System.out.println("down pressed");
+					selectItem(selected);
+				}
 			}
-			selectItem(selected);
-
 		}
 
 	}
@@ -55,13 +60,17 @@ public class JTextPaneKeyListener implements KeyListener {
 
 	private void selectItem(int selected) {
 		popupMenu.getSelectionModel().setSelectedIndex(selected);
-		System.out.println("selected : " + popupMenu.getComponent(popupMenu.getSelectionModel().getSelectedIndex()));
+		System.out.println("selected : "
+				+ ((JMenuItem) popupMenu.getComponent(popupMenu.getSelectionModel().getSelectedIndex())).getText());
 		int itemCount = popupMenu.getComponentCount();
-		for(int item = 0; item < itemCount; item++) {
+		for (int item = 0; item < itemCount; item++) {
 			JMenuItem menuItem = (JMenuItem) popupMenu.getComponent(item);
-			if(item == selected) {
+			if (item == selected) {
+				menuItem.setOpaque(true);
 				menuItem.setBackground(Color.BLUE);
-			}else {
+				menuItem.setForeground(Color.RED);
+			} else {
+				menuItem.setOpaque(true);
 				menuItem.setBackground(UIManager.getColor("MenuItem.background"));
 			}
 		}
