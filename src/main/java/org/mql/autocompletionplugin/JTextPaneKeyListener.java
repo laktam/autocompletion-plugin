@@ -8,9 +8,11 @@ import javax.swing.JPopupMenu;
 
 public class JTextPaneKeyListener implements KeyListener {
 	private JPopupMenu popupMenu;
+	private int selected;
 
 	public JTextPaneKeyListener(JPopupMenu popupMenu) {
 		this.popupMenu = popupMenu;
+		selected = 0;
 	}
 
 	@Override
@@ -23,17 +25,22 @@ public class JTextPaneKeyListener implements KeyListener {
 		if (e.getKeyCode() == KeyEvent.VK_ESCAPE && popupMenu.isVisible()) {
 			popupMenu.setVisible(false);
 		}
-		if (e.getKeyCode() == KeyEvent.VK_TAB) {
+		// if popup is visible that mean there is items
+		if (e.getKeyCode() == KeyEvent.VK_UP && popupMenu.isVisible() && selected > 0 ) {
+			selected--;
 			e.consume(); // Prevent default tab behavior
-			if (popupMenu.isVisible()) {
-//				KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
-				System.out.println("shift pressed");
-				if (popupMenu.isVisible()) {
-					System.out.println("request focus for popupmenu : " + popupMenu.requestFocusInWindow());
-					;
-				}
+			// KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
+			System.out.println("up pressed");
+			popupMenu.getSelectionModel().setSelectedIndex(selected);
 
-			}
+		}
+		if (e.getKeyCode() == KeyEvent.VK_DOWN && popupMenu.isVisible() && selected < popupMenu.getComponentCount() - 1 ) {
+			selected++;
+			e.consume(); // Prevent default tab behavior
+			// KeyboardFocusManager.getCurrentKeyboardFocusManager().clearGlobalFocusOwner();
+			System.out.println("down pressed");
+			popupMenu.getSelectionModel().setSelectedIndex(selected);
+
 		}
 
 	}

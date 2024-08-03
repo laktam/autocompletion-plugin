@@ -25,7 +25,7 @@ public class DocumentTypingListener implements DocumentListener {
 	public DocumentTypingListener(Node root, JTextPane textPane) {
 		this.root = root;
 		suggestionsMenu = new JPopupMenu();
-		suggestionsMenu.addKeyListener(new JPopupMenuKeyListener(suggestionsMenu));
+//		suggestionsMenu.addKeyListener(new JPopupMenuKeyListener(suggestionsMenu));
 		this.textPane = textPane;
 		textPane.addKeyListener(new JTextPaneKeyListener(suggestionsMenu));
 	}
@@ -116,7 +116,9 @@ public class DocumentTypingListener implements DocumentListener {
 			}
 			suggestionsMenu.setLocation(getCaretPosition());
 			suggestionsMenu.setVisible(true);
-			
+			// selected the first element 
+			suggestionsMenu.getSelectionModel().setSelectedIndex(0);
+
 		} else {
 			suggestionsMenu.setVisible(false);
 		}
