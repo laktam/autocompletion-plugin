@@ -10,7 +10,7 @@ public class JPopupMenuKeyListener implements KeyListener {
 	private JPopupMenu popupMenu;
 
 	public JPopupMenuKeyListener(JPopupMenu popupMenu) {
-		selected = -1;
+		selected = 0;
 		this.popupMenu = popupMenu;
 	}
 
@@ -21,6 +21,11 @@ public class JPopupMenuKeyListener implements KeyListener {
 
 	@Override
 	public void keyPressed(KeyEvent e) {
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent e) {
 		if (e.getKeyCode() == KeyEvent.VK_UP) {
 			if (popupMenu.isVisible()) {
 				System.out.println("up pressed");
@@ -40,12 +45,6 @@ public class JPopupMenuKeyListener implements KeyListener {
 				popupMenu.getComponent(selected).requestFocus();
 			}
 		}
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 	}
 
 	public void reset() {
