@@ -12,12 +12,19 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.StyledDocument;
 
 public class JTextPaneKeyListener implements KeyListener {
 	private JPopupMenu popupMenu;
 	private int selected;
+	private Document document;
+	private int offset;
 
-	public JTextPaneKeyListener(JPopupMenu popupMenu) {
+	public JTextPaneKeyListener(JPopupMenu popupMenu, Document document) {
+		this.offset = 0;
+		this.document = document;
 		this.popupMenu = popupMenu;
 		selected = 0;
 		this.popupMenu.addPopupMenuListener(new PopupMenuListener() {
@@ -64,9 +71,16 @@ public class JTextPaneKeyListener implements KeyListener {
 				e.consume(); // Prevent default tab behaviors
 				if (selected < popupMenu.getComponentCount() - 1) {
 					selected++;
-					e.consume();
 					System.out.println("down pressed");
 					selectItem(selected);
+				}
+			}else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+				e.consume();
+				String suggestion = ((JMenuItem) popupMenu.getComponent(selected)).getText();
+				try {
+					document.insertString(offset, suggestion, null);
+				} catch (BadLocationException e1) {
+					e1.printStackTrace();
 				}
 			}
 
@@ -96,5 +110,8 @@ public class JTextPaneKeyListener implements KeyListener {
 			}
 			popupMenu.repaint();
 //		});
+	}
+	public void setOffset(int offset) {
+		this.offset = offset;
 	}
 }

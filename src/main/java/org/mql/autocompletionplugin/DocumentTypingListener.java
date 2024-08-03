@@ -22,13 +22,15 @@ public class DocumentTypingListener implements DocumentListener {
 	private Pattern p = Pattern.compile("\\b\\w+\\b");
 	private JPopupMenu suggestionsMenu;
 	private JTextPane textPane;
+	private JTextPaneKeyListener textPaneKeyListener;
 
 	public DocumentTypingListener(Node root, JTextPane textPane) {
 		this.root = root;
 		suggestionsMenu = new JPopupMenu();
 //		suggestionsMenu.addKeyListener(new JPopupMenuKeyListener(suggestionsMenu));
 		this.textPane = textPane;
-		textPane.addKeyListener(new JTextPaneKeyListener(suggestionsMenu));
+		textPaneKeyListener = new JTextPaneKeyListener(suggestionsMenu,textPane.getDocument());
+		textPane.addKeyListener(textPaneKeyListener);
 	}
 
 	@Override
@@ -52,7 +54,7 @@ public class DocumentTypingListener implements DocumentListener {
 				System.out.println(suggestions);
 				// JPopMenu
 //				suggestionsMenu.setVisible(false);
-				displaySuggestions(suggestions);
+				displaySuggestions(suggestions, e.getOffset());
 
 				// i need to add new word after a suggestion is inserted or after each complete
 				// word \b
@@ -88,7 +90,7 @@ public class DocumentTypingListener implements DocumentListener {
 				System.out.println(suggestions);
 				//
 //				suggestionsMenu.setVisible(false);
-				displaySuggestions(suggestions);
+				displaySuggestions(suggestions, e.getOffset());
 
 				// i need to add new word after a suggestion is inserted or after each complete
 				// word \b
@@ -98,7 +100,6 @@ public class DocumentTypingListener implements DocumentListener {
 			}
 
 		} catch (BadLocationException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
@@ -108,10 +109,11 @@ public class DocumentTypingListener implements DocumentListener {
 
 	}
 
-	private void displaySuggestions(List<String> suggestions) {
+	private void displaySuggestions(List<String> suggestions, int offset) {
 		suggestionsMenu.setVisible(false);
 		suggestionsMenu.removeAll();
 		if (!suggestions.isEmpty()) {
+			textPaneKeyListener.setOffset(offset);
 			for (String suggestion : suggestions) {
 				suggestionsMenu.add(new JMenuItem(suggestion));
 			}
