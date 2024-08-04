@@ -23,8 +23,10 @@ public class DocumentTypingListener implements DocumentListener {
 	private JPopupMenu suggestionsMenu;
 	private JTextPane textPane;
 	private JTextPaneKeyListener textPaneKeyListener;
+	private String prefix;
 
 	public DocumentTypingListener(Node root, JTextPane textPane) {
+		this.prefix = "";
 		this.root = root;
 		suggestionsMenu = new JPopupMenu();
 //		suggestionsMenu.addKeyListener(new JPopupMenuKeyListener(suggestionsMenu));
@@ -44,13 +46,13 @@ public class DocumentTypingListener implements DocumentListener {
 			if (c != ' ') {
 
 				Matcher m = p.matcher(text);
-				String typedWord = "";
+				prefix = "";
 				while (m.find()) {
-					typedWord = m.group();
+					prefix = m.group();
 				}
-				System.out.println("typedWord : " + typedWord);
+				System.out.println("typedWord : " + prefix);
 				System.out.println("suggestions for typed word :");
-				List<String> suggestions = root.getSuggestions(typedWord);
+				List<String> suggestions = root.getSuggestions(prefix);
 				System.out.println(suggestions);
 				// JPopMenu
 //				suggestionsMenu.setVisible(false);
@@ -80,13 +82,13 @@ public class DocumentTypingListener implements DocumentListener {
 			char c = insertion.charAt(insertion.length() - 1);
 			if (c != ' ') {
 				Matcher m = p.matcher(text);
-				String typedWord = "";
+				prefix = "";
 				while (m.find()) {
-					typedWord = m.group();
+					prefix = m.group();
 				}
-				System.out.println("typedWord : " + typedWord);
+				System.out.println("typedWord : " + prefix);
 				System.out.println("suggestions for typed word :");
-				List<String> suggestions = root.getSuggestions(typedWord);
+				List<String> suggestions = root.getSuggestions(prefix);
 				System.out.println(suggestions);
 				//
 //				suggestionsMenu.setVisible(false);
@@ -114,6 +116,7 @@ public class DocumentTypingListener implements DocumentListener {
 		suggestionsMenu.removeAll();
 		if (!suggestions.isEmpty()) {
 			textPaneKeyListener.setOffset(offset);
+			textPaneKeyListener.setPrefix(prefix);
 			for (String suggestion : suggestions) {
 				suggestionsMenu.add(new JMenuItem(suggestion));
 			}

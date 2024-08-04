@@ -21,8 +21,10 @@ public class JTextPaneKeyListener implements KeyListener {
 	private int selected;
 	private Document document;
 	private int offset;
+	private String prefix;
 
 	public JTextPaneKeyListener(JPopupMenu popupMenu, Document document) {
+		this.prefix = "";
 		this.offset = 0;
 		this.document = document;
 		this.popupMenu = popupMenu;
@@ -78,7 +80,9 @@ public class JTextPaneKeyListener implements KeyListener {
 				e.consume();
 				String suggestion = ((JMenuItem) popupMenu.getComponent(selected)).getText();
 				try {
-					document.insertString(offset, suggestion, null);
+					// insert only the part that is not already written
+					suggestion =  suggestion.substring(prefix.length());
+					document.insertString(offset + 1, suggestion, null);
 				} catch (BadLocationException e1) {
 					e1.printStackTrace();
 				}
@@ -113,5 +117,9 @@ public class JTextPaneKeyListener implements KeyListener {
 	}
 	public void setOffset(int offset) {
 		this.offset = offset;
+	}
+	
+	public void setPrefix(String prefix) {
+		this.prefix = prefix;
 	}
 }
