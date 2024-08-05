@@ -56,7 +56,7 @@ public class DocumentTypingListener implements DocumentListener {
 				System.out.println(suggestions);
 				// JPopMenu
 //				suggestionsMenu.setVisible(false);
-				displaySuggestions(suggestions, e.getOffset());
+				displaySuggestions(suggestions, e.getOffset() + e.getLength());
 
 				// i need to add new word after a suggestion is inserted or after each complete
 				// word \b
@@ -92,7 +92,7 @@ public class DocumentTypingListener implements DocumentListener {
 				System.out.println(suggestions);
 				//
 //				suggestionsMenu.setVisible(false);
-				displaySuggestions(suggestions, e.getOffset());
+				displaySuggestions(suggestions, e.getOffset() - e.getLength() + 1);
 
 				// i need to add new word after a suggestion is inserted or after each complete
 				// word \b

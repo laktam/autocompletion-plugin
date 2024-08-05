@@ -82,7 +82,7 @@ public class JTextPaneKeyListener implements KeyListener {
 				try {
 					// insert only the part that is not already written
 					suggestion =  suggestion.substring(prefix.length());
-					document.insertString(offset + 1, suggestion, null);
+					document.insertString(offset , suggestion, null);
 				} catch (BadLocationException e1) {
 					e1.printStackTrace();
 				}
