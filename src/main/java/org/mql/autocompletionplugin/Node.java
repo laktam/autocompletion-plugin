@@ -76,9 +76,8 @@ public class Node {
 				Node child = entry.getValue();
 				if (child.wordStop) {
 					suggestions.add(prefix + entry.getKey());
-				} else {
-					suggestions.addAll(child.getStrings(prefix + entry.getKey()));
 				}
+				suggestions.addAll(child.getStrings(prefix + entry.getKey()));
 			}
 		}
 		return suggestions;
@@ -93,9 +92,9 @@ public class Node {
 			Node child = entry.getValue();
 			if (child.wordStop) {
 				sList.add(prefix + entry.getKey());
-			} else {
-				sList.addAll(child.getStrings(prefix + entry.getKey()));
 			}
+			sList.addAll(child.getStrings(prefix + entry.getKey()));
+
 		}
 		return sList;
 	}
