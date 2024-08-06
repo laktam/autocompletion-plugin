@@ -53,6 +53,7 @@ public class DocumentTypingListener implements DocumentListener {
 				System.out.println("typedWord : " + prefix);
 				System.out.println("suggestions for typed word :");
 				List<String> suggestions = root.getSuggestions(prefix);
+				System.out.println(root);
 				System.out.println(suggestions);
 				// JPopMenu
 //				suggestionsMenu.setVisible(false);
@@ -89,6 +90,7 @@ public class DocumentTypingListener implements DocumentListener {
 				System.out.println("typedWord : " + prefix);
 				System.out.println("suggestions for typed word :");
 				List<String> suggestions = root.getSuggestions(prefix);
+				System.out.println(root);
 				System.out.println(suggestions);
 				//
 //				suggestionsMenu.setVisible(false);

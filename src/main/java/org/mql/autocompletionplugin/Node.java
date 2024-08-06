@@ -71,7 +71,6 @@ public class Node {
 
 		List<String> suggestions = new Vector<String>();
 		if (n != null) {
-
 			for (Entry<Character, Node> entry : n.children.entrySet()) {
 				Node child = entry.getValue();
 				if (child.wordStop) {
