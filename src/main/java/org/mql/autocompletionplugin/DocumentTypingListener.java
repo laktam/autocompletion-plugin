@@ -31,7 +31,7 @@ public class DocumentTypingListener implements DocumentListener {
 		suggestionsMenu = new JPopupMenu();
 //		suggestionsMenu.addKeyListener(new JPopupMenuKeyListener(suggestionsMenu));
 		this.textPane = textPane;
-		textPaneKeyListener = new JTextPaneKeyListener(suggestionsMenu,textPane.getDocument());
+		textPaneKeyListener = new JTextPaneKeyListener(suggestionsMenu, textPane.getDocument());
 		textPane.addKeyListener(textPaneKeyListener);
 	}
 
@@ -41,9 +41,8 @@ public class DocumentTypingListener implements DocumentListener {
 			Document doc = e.getDocument();
 			String text = doc.getText(0, e.getOffset() + e.getLength());
 			String insertion = doc.getText(e.getOffset(), e.getLength());
-			char c = insertion.charAt(insertion.length() - 1);
-			//
-			if (c != ' ') {
+			char lastCharacter = insertion.charAt(insertion.length() - 1);
+			if (lastCharacter != ' ') {
 
 				Matcher m = p.matcher(text);
 				prefix = "";
@@ -64,8 +63,12 @@ public class DocumentTypingListener implements DocumentListener {
 				// root.insert(typedWord);
 			} else {
 				suggestionsMenu.setVisible(false);
+				// if last character inserted is space then add the last character to words trie
+				Matcher m = p.matcher(text);
+				while (m.find()) {
+					root.insert(m.group());
+				}
 			}
-
 		} catch (BadLocationException e1) {
 			e1.printStackTrace();
 		}
@@ -80,8 +83,8 @@ public class DocumentTypingListener implements DocumentListener {
 
 			// test if cursor is on a word not on a space
 			String insertion = doc.getText(e.getOffset() - e.getLength(), e.getLength());
-			char c = insertion.charAt(insertion.length() - 1);
-			if (c != ' ') {
+			char lastCharacter = insertion.charAt(insertion.length() - 1);
+			if (lastCharacter != ' ') {
 				Matcher m = p.matcher(text);
 				prefix = "";
 				while (m.find()) {
@@ -124,7 +127,6 @@ public class DocumentTypingListener implements DocumentListener {
 			}
 			suggestionsMenu.setLocation(getCaretPosition());
 			suggestionsMenu.setVisible(true);
-			
 
 		} else {
 			suggestionsMenu.setVisible(false);

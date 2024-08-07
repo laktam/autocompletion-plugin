@@ -20,7 +20,6 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 
 	public Autocompleter() {
 		root = new Node();
-		System.out.println(" init : " +root);
 	}
 
 	@Override
@@ -30,7 +29,6 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 			docs.add((StyledDocument) textPane.getDocument());
 		}
 		this.openDocuments = docs;
-		// TODO create a set of words
 		for (StyledDocument d : openDocuments) {
 			// TODO the listener should take the collection of words to add to it new words
 			try {
@@ -38,7 +36,6 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 				List<String> words = getWords(text);
 				for (String w : words) {
 					if (w.length() > 0)
-						System.out.println(root);
 						root.insert(w);
 				}
 			} catch (BadLocationException e) {
@@ -66,7 +63,6 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 			for (String w : words) {
 				if (w.length() > 0)
 					root.insert(w);
-				System.out.println(root);
 			}
 			doc.addDocumentListener(new DocumentTypingListener(root, textPane));
 		} catch (BadLocationException e) {
@@ -93,7 +89,6 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 				List<String> words = getWords(text);
 				for (String w : words) {
 					if (w.length() > 0) {
-						System.out.println(root);
 						root.insert(w);
 
 					}

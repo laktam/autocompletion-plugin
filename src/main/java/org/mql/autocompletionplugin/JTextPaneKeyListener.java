@@ -32,7 +32,6 @@ public class JTextPaneKeyListener implements KeyListener {
 		this.popupMenu.addPopupMenuListener(new PopupMenuListener() {
 			@Override
 			public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
-				System.out.println("pop up menu visible ################");
 				selected = 0;
 				// selected the first element
 				((JMenuItem) popupMenu.getComponent(0)).setOpaque(true);
@@ -64,14 +63,12 @@ public class JTextPaneKeyListener implements KeyListener {
 				e.consume(); // Prevent default tab behaviors
 				if (selected > 0) {
 					selected--;
-					System.out.println("up pressed");
 					selectItem(selected);
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
 				e.consume(); // Prevent default tab behaviors
 				if (selected < popupMenu.getComponentCount() - 1) {
 					selected++;
-					System.out.println("down pressed");
 					selectItem(selected);
 				}
 			} else if (e.getKeyCode() == KeyEvent.VK_ENTER) {
