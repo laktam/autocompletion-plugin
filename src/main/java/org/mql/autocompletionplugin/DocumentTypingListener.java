@@ -42,7 +42,7 @@ public class DocumentTypingListener implements DocumentListener {
 			String text = doc.getText(0, e.getOffset() + e.getLength());
 			String insertion = doc.getText(e.getOffset(), e.getLength());
 			char lastCharacter = insertion.charAt(insertion.length() - 1);
-			if (lastCharacter != ' ') {
+			if (Character.isLetterOrDigit(lastCharacter) || lastCharacter == '_') {
 
 				Matcher m = p.matcher(text);
 				prefix = "";
@@ -54,16 +54,12 @@ public class DocumentTypingListener implements DocumentListener {
 				List<String> suggestions = root.getSuggestions(prefix);
 				System.out.println(root);
 				System.out.println(suggestions);
-				// JPopMenu
-//				suggestionsMenu.setVisible(false);
+
 				displaySuggestions(suggestions, e.getOffset() + e.getLength());
 
-				// i need to add new word after a suggestion is inserted or after each complete
-				// word \b
-				// root.insert(typedWord);
 			} else {
 				suggestionsMenu.setVisible(false);
-				// if last character inserted is space then add the last character to words trie
+				// re insert file after each word
 				Matcher m = p.matcher(text);
 				while (m.find()) {
 					root.insert(m.group());
@@ -74,7 +70,6 @@ public class DocumentTypingListener implements DocumentListener {
 		}
 	}
 
-	// TODO when removing if there is only one character left i get no suggestions
 	@Override
 	public void removeUpdate(DocumentEvent e) {
 		try {
@@ -84,7 +79,7 @@ public class DocumentTypingListener implements DocumentListener {
 			// test if cursor is on a word not on a space
 			String insertion = doc.getText(e.getOffset() - e.getLength(), e.getLength());
 			char lastCharacter = insertion.charAt(insertion.length() - 1);
-			if (lastCharacter != ' ') {
+			if (Character.isLetterOrDigit(lastCharacter) || lastCharacter == '_') {
 				Matcher m = p.matcher(text);
 				prefix = "";
 				while (m.find()) {

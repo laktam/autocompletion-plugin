@@ -84,7 +84,10 @@ public class JTextPaneKeyListener implements KeyListener {
 			} else {
 				// if menu is visible and other arrows are clicked hide the suggestions
 				if (e.getKeyCode() == KeyEvent.VK_ESCAPE || e.getKeyCode() == KeyEvent.VK_LEFT
-						|| e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_TAB) {
+						|| e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_TAB
+						|| (!Character.isLetterOrDigit(e.getKeyChar())
+								&& !(e.getKeyCode() == KeyEvent.VK_UNDERSCORE))) {
+					System.out.println("hide suggestions @@@@@@@@@@@@@");
 					popupMenu.setVisible(false);
 				}
 			}
