@@ -8,11 +8,13 @@ import java.awt.event.KeyListener;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JTextPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
 import javax.swing.text.Document;
 import javax.swing.text.StyledDocument;
 
@@ -20,13 +22,13 @@ public class JTextPaneKeyListener implements KeyListener {
 	private JPopupMenu popupMenu;
 	private int selected;
 	private Document document;
-	private int offset;
 	private String prefix;
+	private JTextPane textPane;
 
-	public JTextPaneKeyListener(JPopupMenu popupMenu, Document document) {
+	public JTextPaneKeyListener(JPopupMenu popupMenu, JTextPane textPane) {
 		this.prefix = "";
-		this.offset = 0;
-		this.document = document;
+		this.textPane = textPane;
+		this.document = textPane.getDocument();
 		this.popupMenu = popupMenu;
 		selected = 0;
 		this.popupMenu.addPopupMenuListener(new PopupMenuListener() {
@@ -77,7 +79,7 @@ public class JTextPaneKeyListener implements KeyListener {
 				try {
 					// insert only the part that is not already written
 					suggestion = suggestion.substring(prefix.length());
-					document.insertString(offset, suggestion, null);
+					document.insertString(getCaretOffset(), suggestion, null);
 				} catch (BadLocationException e1) {
 					e1.printStackTrace();
 				}
@@ -92,6 +94,14 @@ public class JTextPaneKeyListener implements KeyListener {
 				}
 			}
 
+		}
+		// ( { [ insertions
+		if (e.getKeyChar() == '(') {
+			try {
+				document.insertString(getCaretOffset(), ")", null);
+			} catch (BadLocationException e1) {
+				e1.printStackTrace();
+			}
 		}
 	}
 
@@ -119,8 +129,9 @@ public class JTextPaneKeyListener implements KeyListener {
 //		});
 	}
 
-	public void setOffset(int offset) {
-		this.offset = offset;
+	private int getCaretOffset() {
+		Caret caret = textPane.getCaret();
+		return caret.getDot();
 	}
 
 	public void setPrefix(String prefix) {
