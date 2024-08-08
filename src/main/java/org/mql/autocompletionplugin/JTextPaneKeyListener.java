@@ -95,19 +95,31 @@ public class JTextPaneKeyListener implements KeyListener {
 			}
 
 		}
-		// ( { [ insertions
-		if (e.getKeyChar() == '(') {
-			try {
-				document.insertString(getCaretOffset(), ")", null);
-			} catch (BadLocationException e1) {
-				e1.printStackTrace();
-			}
-		}
+	
 	}
 
 	@Override
 	public void keyReleased(KeyEvent e) {
-
+		// ( { [ insertions
+		try {
+			// in key released to wait the typing of the char
+			int offset = getCaretOffset();
+			if (e.getKeyChar() == '(') {
+				e.consume();
+				document.insertString(offset, ")", null);
+				setCaretOffset(offset);
+			} else if (e.getKeyChar() == '{') {
+				e.consume();
+				document.insertString(offset , "}", null);
+				setCaretOffset(offset);
+			} else if (e.getKeyChar() == '[') {
+				e.consume();
+				document.insertString(offset, "]", null);
+				setCaretOffset(offset);
+			}
+		} catch (BadLocationException e1) {
+			e1.printStackTrace();
+		}
 	}
 
 	private void selectItem(int selected) {
@@ -132,6 +144,12 @@ public class JTextPaneKeyListener implements KeyListener {
 	private int getCaretOffset() {
 		Caret caret = textPane.getCaret();
 		return caret.getDot();
+	}
+
+	private void setCaretOffset(int offset) {
+		Caret caret = textPane.getCaret();
+		caret.setDot(offset);
+		;
 	}
 
 	public void setPrefix(String prefix) {

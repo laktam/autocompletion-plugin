@@ -5,6 +5,7 @@ import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
+import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -31,7 +32,7 @@ public class DocumentTypingListener implements DocumentListener {
 		suggestionsMenu = new JPopupMenu();
 //		suggestionsMenu.addKeyListener(new JPopupMenuKeyListener(suggestionsMenu));
 		this.textPane = textPane;
-		textPaneKeyListener = new JTextPaneKeyListener(suggestionsMenu, textPane.getDocument());
+		textPaneKeyListener = new JTextPaneKeyListener(suggestionsMenu, textPane);
 		textPane.addKeyListener(textPaneKeyListener);
 	}
 
@@ -90,14 +91,15 @@ public class DocumentTypingListener implements DocumentListener {
 				List<String> suggestions = root.getSuggestions(prefix);
 				System.out.println(root);
 				System.out.println(suggestions);
-				//
-//				suggestionsMenu.setVisible(false);
 				displaySuggestions(suggestions, e.getOffset() - e.getLength() + 1);
-
-				// i need to add new word after a suggestion is inserted or after each complete
-				// word \b
-				// root.insert(typedWord);
-			} else {
+			}
+			// must be inserted without suggestions
+//			else if(lastCharacter == '(') {
+//				List<String> suggestions = new Vector<String>();
+//				suggestions.add(")");
+//				displaySuggestions(suggestions, e.getOffset() - e.getLength() + 1);
+//			}
+			else {
 				suggestionsMenu.setVisible(false);
 			}
 
@@ -115,7 +117,7 @@ public class DocumentTypingListener implements DocumentListener {
 		suggestionsMenu.setVisible(false);
 		suggestionsMenu.removeAll();
 		if (!suggestions.isEmpty()) {
-			textPaneKeyListener.setOffset(offset);
+
 			textPaneKeyListener.setPrefix(prefix);
 			for (String suggestion : suggestions) {
 				suggestionsMenu.add(new JMenuItem(suggestion));
@@ -134,5 +136,10 @@ public class DocumentTypingListener implements DocumentListener {
 		p.x += textPane.getLocationOnScreen().x;
 		p.y += textPane.getLocationOnScreen().y + textPane.getFont().getSize2D();
 		return p;
+	}
+
+	private int getCaretOffset() {
+		Caret caret = textPane.getCaret();
+		return caret.getDot();
 	}
 }
