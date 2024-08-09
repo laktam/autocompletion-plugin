@@ -3,6 +3,7 @@ package org.mql.autocompletionplugin;
 import java.awt.Color;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
+import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
 import java.util.List;
 import java.util.Vector;
@@ -25,12 +26,11 @@ public class DocumentTypingListener implements DocumentListener {
 	private JTextPane textPane;
 	private JTextPaneKeyListener textPaneKeyListener;
 	private String prefix;
-
+	
 	public DocumentTypingListener(Node root, JTextPane textPane) {
 		this.prefix = "";
 		this.root = root;
 		suggestionsMenu = new JPopupMenu();
-//		suggestionsMenu.addKeyListener(new JPopupMenuKeyListener(suggestionsMenu));
 		this.textPane = textPane;
 		textPaneKeyListener = new JTextPaneKeyListener(suggestionsMenu, textPane);
 		textPane.addKeyListener(textPaneKeyListener);

@@ -1,25 +1,36 @@
 package org.mql.autocompletionplugin;
 
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.swing.JTextPane;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.StyledDocument;
 import org.mql.jcodeeditor.documentHandlers.TextPanesHandler;
 import org.mql.jcodeeditor.plugins.FilesHandler;
+import org.mql.jcodeeditor.plugins.Reactivable;
 
-public class Autocompleter implements TextPanesHandler, FilesHandler {
+public class Autocompleter implements TextPanesHandler, FilesHandler, Reactivable {
 	private List<StyledDocument> openDocuments;
 	private Node root;
+	private List<JTextPane> textPanes;
+	private List<DocumentListener> documentListeners;
+	private boolean active;
 
 	public Autocompleter() {
+		documentListeners = new Vector<DocumentListener>();
+		textPanes = new Vector<JTextPane>();
 		root = new Node();
+		active = true;
 	}
 
 	@Override
@@ -30,7 +41,6 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 		}
 		this.openDocuments = docs;
 		for (StyledDocument d : openDocuments) {
-			// TODO the listener should take the collection of words to add to it new words
 			try {
 				String text = d.getText(0, d.getLength());
 				List<String> words = getWords(text);
@@ -46,11 +56,7 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 
 	@Override
 	public void execute() {
-		// TODO i need to create a DocumentListener and add it to docs here
-//		for (StyledDocument d : openDocuments) {
-//			// TODO the listener should take the collection of words to add to it new words and test 
-//			d.addDocumentListener(null);
-//		}
+
 	}
 
 	@Override
@@ -64,7 +70,9 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 				if (w.length() > 0)
 					root.insert(w);
 			}
-			doc.addDocumentListener(new DocumentTypingListener(root, textPane));
+			DocumentListener docListener = new DocumentTypingListener(root, textPane);
+			documentListeners.add(docListener);
+			doc.addDocumentListener(docListener);
 		} catch (BadLocationException e) {
 			e.printStackTrace();
 		}
@@ -97,7 +105,6 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 				e.printStackTrace();
 			}
 		}
-
 	}
 
 	private String readFile(File file) throws IOException {
@@ -111,6 +118,31 @@ public class Autocompleter implements TextPanesHandler, FilesHandler {
 			e.printStackTrace();
 		}
 		return text.toString();
+	}
+
+	@Override
+	public void activate() {
+		if (!active) {
+			for (JTextPane textPane : textPanes) {
+				Document doc = textPane.getDocument();
+				doc.addDocumentListener(new DocumentTypingListener(root, textPane));
+			}
+		}
+	}
+
+	@Override
+	public void deactivate() {
+		if (active) {
+			for (int i = 0; i < textPanes.size(); i++) {
+				KeyListener keyListeners[] = textPanes.get(i).getKeyListeners();
+				for (KeyListener keyListener : keyListeners) {
+					textPanes.get(i).removeKeyListener(keyListener);
+				}
+			}
+			for (int i = 0; i < openDocuments.size(); i++) {
+				openDocuments.get(i).removeDocumentListener(documentListeners.get(i));
+			}
+		}
 	}
 
 }
