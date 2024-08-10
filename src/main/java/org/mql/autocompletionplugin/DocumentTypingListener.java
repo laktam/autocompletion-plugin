@@ -93,12 +93,7 @@ public class DocumentTypingListener implements DocumentListener {
 				System.out.println(suggestions);
 				displaySuggestions(suggestions, e.getOffset() - e.getLength() + 1);
 			}
-			// must be inserted without suggestions
-//			else if(lastCharacter == '(') {
-//				List<String> suggestions = new Vector<String>();
-//				suggestions.add(")");
-//				displaySuggestions(suggestions, e.getOffset() - e.getLength() + 1);
-//			}
+
 			else {
 				suggestionsMenu.setVisible(false);
 			}

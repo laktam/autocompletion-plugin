@@ -145,4 +145,9 @@ public class Autocompleter implements TextPanesHandler, FilesHandler, Reactivabl
 		}
 	}
 
+	@Override
+	public boolean isActive() {
+		return active;
+	}
+
 }
