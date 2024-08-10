@@ -127,6 +127,7 @@ public class Autocompleter implements TextPanesHandler, FilesHandler, Reactivabl
 				Document doc = textPane.getDocument();
 				doc.addDocumentListener(new DocumentTypingListener(root, textPane));
 			}
+			active = true;
 		}
 	}
 
@@ -142,6 +143,7 @@ public class Autocompleter implements TextPanesHandler, FilesHandler, Reactivabl
 			for (int i = 0; i < openDocuments.size(); i++) {
 				openDocuments.get(i).removeDocumentListener(documentListeners.get(i));
 			}
+			active = false;
 		}
 	}
 
