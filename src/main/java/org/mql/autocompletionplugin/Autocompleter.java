@@ -17,9 +17,9 @@ import javax.swing.text.Document;
 import javax.swing.text.StyledDocument;
 import org.mql.jcodeeditor.documentHandlers.TextPanesHandler;
 import org.mql.jcodeeditor.plugins.FilesHandler;
-import org.mql.jcodeeditor.plugins.Reactivable;
+import org.mql.jcodeeditor.plugins.Plugin;
 
-public class Autocompleter implements TextPanesHandler, FilesHandler, Reactivable {
+public class Autocompleter implements TextPanesHandler, FilesHandler, Plugin {
 	private List<StyledDocument> openDocuments;
 	private Node root;
 	private List<JTextPane> textPanes;
@@ -35,6 +35,7 @@ public class Autocompleter implements TextPanesHandler, FilesHandler, Reactivabl
 
 	@Override
 	public void setTextPanes(List<JTextPane> textPanes) {
+		this.textPanes.addAll(textPanes);
 		List<StyledDocument> docs = new Vector<StyledDocument>();
 		for (JTextPane textPane : textPanes) {
 			docs.add((StyledDocument) textPane.getDocument());
@@ -61,6 +62,7 @@ public class Autocompleter implements TextPanesHandler, FilesHandler, Reactivabl
 
 	@Override
 	public void addTextPane(JTextPane textPane) {
+		textPanes.add(textPane);
 		StyledDocument doc = (StyledDocument) textPane.getDocument();
 		openDocuments.add(doc);
 		try {
@@ -137,6 +139,7 @@ public class Autocompleter implements TextPanesHandler, FilesHandler, Reactivabl
 			for (int i = 0; i < textPanes.size(); i++) {
 				KeyListener keyListeners[] = textPanes.get(i).getKeyListeners();
 				for (KeyListener keyListener : keyListeners) {
+					System.out.println("key listener " + keyListener);
 					textPanes.get(i).removeKeyListener(keyListener);
 				}
 			}
@@ -150,6 +153,16 @@ public class Autocompleter implements TextPanesHandler, FilesHandler, Reactivabl
 	@Override
 	public boolean isActive() {
 		return active;
+	}
+
+	@Override
+	public String getName() {
+		return "Autocompleter";
+	}
+
+	@Override
+	public String getDescription() {
+		return "";
 	}
 
 }
