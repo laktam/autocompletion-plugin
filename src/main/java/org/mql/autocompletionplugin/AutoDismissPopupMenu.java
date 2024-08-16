@@ -21,7 +21,6 @@ public class AutoDismissPopupMenu extends JPopupMenu {
             }
         });
 
-        // Add a mouse listener to check for clicks outside the menu
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseExited(MouseEvent e) {

@@ -19,13 +19,13 @@ import javax.swing.text.Document;
 import javax.swing.text.StyledDocument;
 
 public class JTextPaneKeyListener implements KeyListener {
-	private JPopupMenu popupMenu;
+	private AutoDismissPopupMenu popupMenu;
 	private int selected;
 	private Document document;
 	private String prefix;
 	private JTextPane textPane;
 
-	public JTextPaneKeyListener(JPopupMenu popupMenu, JTextPane textPane) {
+	public JTextPaneKeyListener(AutoDismissPopupMenu popupMenu, JTextPane textPane) {
 		this.prefix = "";
 		this.textPane = textPane;
 		this.document = textPane.getDocument();

@@ -22,7 +22,7 @@ import javax.swing.text.Document;
 public class DocumentTypingListener implements DocumentListener {
 	private Node root;
 	private Pattern p = Pattern.compile("\\b\\w+\\b");
-	private JPopupMenu suggestionsMenu;
+	private AutoDismissPopupMenu suggestionsMenu;
 	private JTextPane textPane;
 	private JTextPaneKeyListener textPaneKeyListener;
 	private String prefix;
@@ -30,7 +30,7 @@ public class DocumentTypingListener implements DocumentListener {
 	public DocumentTypingListener(Node root, JTextPane textPane) {
 		this.prefix = "";
 		this.root = root;
-		suggestionsMenu = new JPopupMenu();
+		suggestionsMenu = new AutoDismissPopupMenu();
 		this.textPane = textPane;
 		textPaneKeyListener = new JTextPaneKeyListener(suggestionsMenu, textPane);
 		textPane.addKeyListener(textPaneKeyListener);
