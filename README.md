@@ -19,5 +19,8 @@ The **Autocompletion Plugin** is an extension for the [JCodeEditor](https://gith
 
 1. Clone or download this repository.
 2. Add the `Autocompletion Plugin` to the `plugins` folder of the JCodeEditor project.
-3. Ensure that the plugin is loaded by JCodeEditor during runtime.
+
+## Example
+
+![example](./screenshots/1.png)
 
