@@ -17,18 +17,11 @@ public class AutoDismissPopupMenu extends JPopupMenu {
 		
             @Override
             public void focusLost(FocusEvent e) {
+            	System.out.println("focus lost");
                 setVisible(false);
             }
         });
-
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseExited(MouseEvent e) {
-                if (!contains(e.getPoint())) {
-                    setVisible(false);
-                }
-            }
-        });
+        
     }
 
 }
